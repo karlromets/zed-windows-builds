@@ -25,8 +25,8 @@ jobs:
           UPSTREAM_TAG=$(echo "$UPSTREAM_RELEASE" | jq -r '.tag_name')
           echo "Latest upstream release: $UPSTREAM_TAG"
 
-          # Get latest stable release tag from current repo
-          CURRENT_TAG=$(gh api repos/${{ github.repository }}/releases/latest --jq '.tag_name // "none"')
+          # Get latest stable release tag from current repo (handle case where no releases exist)
+          CURRENT_TAG=$(gh api repos/${{ github.repository }}/releases/latest --jq '.tag_name // "none"' 2>/dev/null || echo "none")
           echo "Latest current repo release: $CURRENT_TAG"
 
           # Set variables based on comparison
